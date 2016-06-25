@@ -1,16 +1,19 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.jiangzuomeng.fleetingtime.viewConctroller.AlbumFragment">
 
 
     <com.jiangzuomeng.fleetingtime.widget.GalleryFlow
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:spacing = "20dp"
-        android:id="@+id/gallery">
+        android:id="@+id/gallery"
+        android:layout_weight="1"
+        >
     </com.jiangzuomeng.fleetingtime.widget.GalleryFlow>
 
   <!--  <ImageView
@@ -18,5 +21,9 @@
         android:layout_height="match_parent"
         android:layout_below="@id/gallery"
         android:background="@drawable/city"/>-->
-
-</RelativeLayout>
+<com.amap.api.maps2d.MapView
+    android:id="@+id/mapView_gallery"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"></com.amap.api.maps2d.MapView>
+</LinearLayout>

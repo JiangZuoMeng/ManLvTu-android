@@ -20,7 +20,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="b2a90af2018934ed479377d761e2a10f"></meta-data>
+        <meta-data android:name="com.amap.api.v2.apikey"
+            android:value="0c7059fb04a99f5de83687712e70b00e"></meta-data>
+
 
         <activity android:name=".viewConctroller.MainActivity">
             <intent-filter>
@@ -29,6 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="com.amap.api.location.APSService"></service>
     </application>
 
 </manifest>

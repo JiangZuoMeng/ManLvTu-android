@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.MapView;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.VO.Album;
 import com.jiangzuomeng.fleetingtime.adapter.GalleryAdapter;
@@ -23,6 +25,9 @@ import java.util.List;
 public class AlbumFragment extends Fragment {
 
     private View view;
+
+    private MapView mMapView = null;
+    private AMap aMap = null;
 
     private static final String TAG = "ALBUM";
 
@@ -59,10 +64,18 @@ public class AlbumFragment extends Fragment {
 
         galleryFlow.setAdapter(galleryAdapter);
 
+        mMapView = (MapView) view.findViewById(R.id.mapView_gallery);
+        mMapView.onCreate(savedInstanceState);
+        initMap();
+
         return view;
     }
 
-
+    private void initMap() {
+        if (aMap == null) {
+            aMap = mMapView.getMap();
+        }
+    }
 
 
     private List<Album> getAlbumList() {
@@ -86,13 +99,36 @@ public class AlbumFragment extends Fragment {
             System.out.println(TAG);
             getActivity().setTitle(getResources().getString(R.string.album));
             getAlbumList();
-
         }
         if(hidd) {
             for (Bitmap bit : tempBitmaps) {
                 bit.recycle();
-
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，实现地图生命周期管理
+        mMapView.onSaveInstanceState(outState);
+    }
+
 }
