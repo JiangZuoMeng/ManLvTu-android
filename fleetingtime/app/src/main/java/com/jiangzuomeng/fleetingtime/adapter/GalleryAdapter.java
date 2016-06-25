@@ -52,7 +52,7 @@ public class GalleryAdapter extends BaseAdapter {
         ImageView temp = new ImageView(mContext);
         temp.setVisibility(View.GONE);
         ImageView imageView = new ImageView(mContext);
-        imageView.setLayoutParams(new Gallery.LayoutParams(140, 240));
+        imageView.setLayoutParams(new Gallery.LayoutParams(140, 300));
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setImageBitmap(BitmapUtil.createReflectedBitmap(albumList.get(position).getCover()));
         

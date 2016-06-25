@@ -9,21 +9,18 @@
     <com.jiangzuomeng.fleetingtime.widget.GalleryFlow
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:spacing = "20dp"
         android:id="@+id/gallery"
-        android:layout_weight="1"
-        >
+        android:background="@color/mapBg"
+        android:layout_weight="1">
     </com.jiangzuomeng.fleetingtime.widget.GalleryFlow>
 
-  <!--  <ImageView
+
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/mapView_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/gallery"
-        android:background="@drawable/city"/>-->
-<com.amap.api.maps2d.MapView
-    android:id="@+id/mapView_gallery"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"></com.amap.api.maps2d.MapView>
+        android:layout_weight="1">
+    </com.amap.api.maps2d.MapView>
 </LinearLayout>

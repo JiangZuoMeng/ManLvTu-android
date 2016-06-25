@@ -8,6 +8,8 @@
     <color name="iconBarBg">#fff9f9f9</color>
     <color name="iconGray">#ff9e9e9e</color>
 
+    <color name="mapBg">#FCF9F2</color>
+
     <color name="fabWhite">#fff9f9f9</color>
     <color name="fabGray">#ff9e9e9e</color>
     <color name="fabRed">#ffff5722</color>
