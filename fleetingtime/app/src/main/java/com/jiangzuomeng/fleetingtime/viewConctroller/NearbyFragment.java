@@ -20,6 +20,7 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MyLocationStyle;
 import com.jiangzuomeng.fleetingtime.R;
 
@@ -30,8 +31,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class NearbyFragment extends Fragment implements LocationSource,
-        AMapLocationListener  {
-
+        AMapLocationListener, AMap.OnMarkerClickListener {
     private View view;
 
     private static final String TAG = "NEARBY";
@@ -115,7 +115,6 @@ public class NearbyFragment extends Fragment implements LocationSource,
         aMap.setLocationSource(this);// 设置定位监听
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-
     }
 
 
@@ -251,5 +250,10 @@ public class NearbyFragment extends Fragment implements LocationSource,
             mlocationClient.onDestroy();
         }
         mlocationClient = null;
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 }

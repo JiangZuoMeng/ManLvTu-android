@@ -22,6 +22,7 @@
         android:layout_height="match_parent"
         android:background = "@drawable/map_temp"/>-->
     <com.amap.api.maps2d.MapView
+        android:layout_below="@+id/tabLayout"
         android:id="@+id/mapView_nearBy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
