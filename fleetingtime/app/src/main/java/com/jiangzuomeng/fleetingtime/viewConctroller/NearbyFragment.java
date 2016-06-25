@@ -60,6 +60,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
         view =  inflater.inflate(R.layout.fragment_nearby, container, false);
 
         mMapView = (MapView)view.findViewById(R.id.mapView_nearBy);
+
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         mMapView.onCreate(savedInstanceState);
 
@@ -179,6 +180,11 @@ public class NearbyFragment extends Fragment implements LocationSource,
         if(!hidd) {
             System.out.println(TAG);
             getActivity().setTitle(getResources().getString(R.string.nearby));
+             //在activity执行onResume时执行mMapView.onResume ()，实现地图生命周期管理
+        mMapView.onResume();
+
+        } else {
+            mMapView.onPause();
 
         }
     }
@@ -216,7 +222,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
-                Log.e("AmapErr",errText);
+                Log.d("AmapErr",errText);
             }
         }
     }

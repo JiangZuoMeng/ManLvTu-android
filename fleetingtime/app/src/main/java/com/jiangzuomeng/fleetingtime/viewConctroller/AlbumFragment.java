@@ -41,6 +41,8 @@ public class AlbumFragment extends Fragment {
 
     private GalleryAdapter galleryAdapter;
 
+    Bundle save;
+
 
     public AlbumFragment() {
         // Required empty public constructor
@@ -66,7 +68,7 @@ public class AlbumFragment extends Fragment {
 
         mMapView = (MapView) view.findViewById(R.id.mapView_gallery);
         mMapView.onCreate(savedInstanceState);
-        initMap();
+//        initMap();
 
         return view;
     }
@@ -98,12 +100,12 @@ public class AlbumFragment extends Fragment {
         if(!hidd) {
             System.out.println(TAG);
             getActivity().setTitle(getResources().getString(R.string.album));
-            getAlbumList();
+            initMap();
+            mMapView.onResume();
         }
         if(hidd) {
-            for (Bitmap bit : tempBitmaps) {
-                bit.recycle();
-            }
+            mMapView.onPause();
+
         }
     }
 
@@ -111,6 +113,10 @@ public class AlbumFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        for (Bitmap bit : tempBitmaps) {
+            bit.recycle();
+
+        }
     }
 
     @Override
