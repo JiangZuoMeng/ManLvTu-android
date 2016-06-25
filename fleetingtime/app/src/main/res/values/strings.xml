@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">fleetingtime</string>
+    <string name="nearby">附近</string>
+    <string name="album">相册</string>
+    <string name="circle">圈子</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
