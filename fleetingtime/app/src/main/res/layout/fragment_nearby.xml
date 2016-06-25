@@ -21,7 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background = "@drawable/map_temp"/>-->
-
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/mapView_nearBy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:layout_height="wrap_content"
