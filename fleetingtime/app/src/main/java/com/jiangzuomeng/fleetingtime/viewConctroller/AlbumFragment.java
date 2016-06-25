@@ -63,10 +63,12 @@ public class AlbumFragment extends Fragment {
     }
 
 
+
+
     private List<Album> getAlbumList() {
         List<Album> albumList = new ArrayList<>();
 
-        tempBitmaps.add(BitmapFactory.decodeResource(getResources(),R.drawable.beijing).compress());
+        tempBitmaps.add(BitmapFactory.decodeResource(getResources(),R.drawable.beijing));
         tempBitmaps.add(BitmapFactory.decodeResource(getResources(),R.drawable.guangzhou));
         Album album1 = new Album("北京", tempBitmaps.get(0));
         albumList.add(album1);

@@ -16,11 +16,11 @@
         app:tabIndicatorHeight="4dp"
         />
 
-    <ImageView
+<!--   <ImageView
         android:layout_below="@id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background = "@drawable/map_temp"/>
+        android:background = "@drawable/map_temp"/>-->
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu

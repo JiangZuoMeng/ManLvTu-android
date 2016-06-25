@@ -13,10 +13,10 @@
         android:id="@+id/gallery">
     </com.jiangzuomeng.fleetingtime.widget.GalleryFlow>
 
-    <ImageView
+  <!--  <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/gallery"
-        android:background="@drawable/city"/>
+        android:background="@drawable/city"/>-->
 
 </RelativeLayout>
