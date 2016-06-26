@@ -1,16 +1,15 @@
 package com.jiangzuomeng.fleetingtime.viewConctroller;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -20,12 +19,31 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.jiangzuomeng.fleetingtime.R;
+import com.jiangzuomeng.fleetingtime.models.Travel;
+import com.jiangzuomeng.fleetingtime.models.TravelItem;
+import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
+import com.jiangzuomeng.fleetingtime.network.VolleyManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +67,16 @@ public class NearbyFragment extends Fragment implements LocationSource,
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
 
+    private double locationLat = -1;
+    private double locationLng = -1;
+    private Map<Marker, TravelItem> markerTravelItemMap = new HashMap<>();
+
+    private VolleyManager volleyManager;
+    public interface onLocationChangedInterface {
+        void onLocationChange(double locationLng, double locationLat);
+    }
+
+    private onLocationChangedInterface notifyLocationChanged;
     public NearbyFragment() {
         // Required empty public constructor
     }
@@ -64,6 +92,8 @@ public class NearbyFragment extends Fragment implements LocationSource,
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         mMapView.onCreate(savedInstanceState);
 
+        volleyManager = VolleyManager.getInstance(
+                getActivity().getApplicationContext());
         aMap = mMapView.getMap();
         initMap();
 
@@ -71,7 +101,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
         tabLayout = (TabLayout)view.findViewById(R.id.tabLayout);
 
         titleList = new ArrayList<String>();
-        titleList.add("所以");
+        titleList.add("所有");
         titleList.add("美食");
         titleList.add("风景");
         titleList.add("人文");
@@ -97,7 +127,6 @@ public class NearbyFragment extends Fragment implements LocationSource,
         captureBtn.setOnClickListener(btnListener);
         finishBtn.setOnClickListener(btnListener);
 
-
         return view;
     }
 
@@ -117,6 +146,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
         aMap.setLocationSource(this);// 设置定位监听
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+
     }
 
 
@@ -221,6 +251,16 @@ public class NearbyFragment extends Fragment implements LocationSource,
             if (amapLocation != null
                     && amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                double newLocationLat = amapLocation.getLatitude();
+                double newLocationLng = amapLocation.getLongitude();
+                try {
+                    addMarkersNearBy();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                locationLat = newLocationLat;
+                locationLng = newLocationLng;
+                notifyLocationChanged.onLocationChange(locationLng, locationLat);
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
                 Log.d("AmapErr",errText);
@@ -260,7 +300,57 @@ public class NearbyFragment extends Fragment implements LocationSource,
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onLocationChangedInterface) {
+            notifyLocationChanged = (onLocationChangedInterface) context;
+        }
+    }
+    @Override
     public boolean onMarkerClick(Marker marker) {
         return false;
+    }
+public static final String W = "wilbert";
+    private  void addMarkersNearBy() throws MalformedURLException {
+        Log.d(W, "add markers nearby");
+        double distance = NetworkJsonKeyDefine.NEAR_DISTANCE;
+        String url = TravelItem.getQueryNearbyUrl(locationLat - distance,
+                locationLat + distance, locationLng - distance,
+                locationLng + distance).toString();
+        StringRequest request = new StringRequest(Request.Method.GET,
+                url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                for (Marker marker:markerTravelItemMap.keySet()) {
+                    marker.destroy();
+                }
+                markerTravelItemMap.clear();
+                JSONTokener parser = new JSONTokener(response);
+                try {
+                    JSONObject jsonObject = (JSONObject) parser.nextValue();
+                    JSONArray jsonArray = jsonObject.getJSONArray(
+                            NetworkJsonKeyDefine.DATA_KEY
+                    );
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        TravelItem travelItem = TravelItem.fromJson(jsonArray.getString(i), true);
+                        Marker marker = aMap.addMarker(new MarkerOptions().position(new LatLng(
+                                travelItem.locationLat, travelItem.locationLng
+                        )));
+                        markerTravelItemMap.put(marker, travelItem);
+                        List<Marker> markers = aMap.getMapScreenMarkers();
+                        Log.d(W, "markers size:" + markers.size());
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        volleyManager.addToRequestQueue(request);
     }
 }

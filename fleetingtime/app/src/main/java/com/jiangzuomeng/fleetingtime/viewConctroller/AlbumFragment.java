@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdate;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.VO.Album;
@@ -77,6 +79,8 @@ public class AlbumFragment extends Fragment {
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
+        CameraUpdate cameraUpdate = CameraUpdateFactory.zoomTo(4);
+        aMap.animateCamera(cameraUpdate);
     }
 
 

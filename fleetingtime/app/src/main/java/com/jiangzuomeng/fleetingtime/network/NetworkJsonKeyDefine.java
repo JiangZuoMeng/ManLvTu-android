@@ -63,5 +63,6 @@ public class NetworkJsonKeyDefine {
     public static final String FILE_UPLOAD_PREFIX = "upload";
     public static final String FILE_UPLOAD_PARAMETER = "upload";
     public static final String FILE_DOWNLOAD_FREFIX = "download";
-    public static final double NEAR_DISTANCE = 0.001;
+//    public static final double NEAR_DISTANCE = 0.001;
+    public static final double NEAR_DISTANCE = 1;
 }
