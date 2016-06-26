@@ -71,6 +71,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
         tabLayout = (TabLayout)view.findViewById(R.id.tabLayout);
 
         titleList = new ArrayList<String>();
+        titleList.add("所以");
         titleList.add("美食");
         titleList.add("风景");
         titleList.add("人文");
