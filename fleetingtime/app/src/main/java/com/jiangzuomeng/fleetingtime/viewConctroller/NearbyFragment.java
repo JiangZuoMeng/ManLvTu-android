@@ -184,6 +184,22 @@ public class NearbyFragment extends Fragment implements LocationSource,
                     finishBtn.setVisibility(View.VISIBLE);
                     startBtn.setVisibility(View.GONE);
                     // TODO: 16/6/25 start journey
+
+                    final CreateAlbumDialog createAlbumDialog = new CreateAlbumDialog(getActivity(),R.style.AlbumDialog);
+                    createAlbumDialog.init();
+                    createAlbumDialog.show();
+
+                    createAlbumDialog.setClickListener(new CreateAlbumDialog.ClickListenerInterface() {
+                        @Override
+                        public void doCreate() {
+                            createAlbumDialog.dismiss();
+                        }
+
+                        @Override
+                        public void doCancel() {
+                            createAlbumDialog.dismiss();
+                        }
+                    });
                     break;
 
                 case R.id.menu_capture:

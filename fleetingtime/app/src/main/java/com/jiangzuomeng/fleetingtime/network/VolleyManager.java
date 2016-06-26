@@ -17,6 +17,7 @@ public class VolleyManager {
     private VolleyManager(Context context) {
         mContext = context;
     }
+
     public static synchronized VolleyManager getInstance(Context context) {
         if (volleyManager == null) {
             volleyManager = new VolleyManager(context);
