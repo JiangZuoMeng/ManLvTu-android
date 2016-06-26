@@ -1,16 +1,15 @@
 package com.jiangzuomeng.fleetingtime.viewConctroller;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -49,6 +48,11 @@ public class NearbyFragment extends Fragment implements LocationSource,
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
 
+    public interface onLocationChangedInterface {
+        void onLocationChange(double locationLng, double locationLat);
+    }
+
+    private onLocationChangedInterface notifyLocationChanged;
     public NearbyFragment() {
         // Required empty public constructor
     }
@@ -220,6 +224,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
             if (amapLocation != null
                     && amapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+                notifyLocationChanged.onLocationChange(amapLocation.getLongitude(), amapLocation.getLatitude());
             } else {
                 String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
                 Log.d("AmapErr",errText);
@@ -258,6 +263,13 @@ public class NearbyFragment extends Fragment implements LocationSource,
         mlocationClient = null;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onLocationChangedInterface) {
+            notifyLocationChanged = (onLocationChangedInterface) context;
+        }
+    }
     @Override
     public boolean onMarkerClick(Marker marker) {
         return false;

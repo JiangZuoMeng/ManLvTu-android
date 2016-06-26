@@ -10,13 +10,17 @@ import android.view.View;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
 
-public class MainActivity extends AppCompatActivity implements FragmentIndicator.OnIndicateListener {
+public class MainActivity extends AppCompatActivity implements FragmentIndicator.OnIndicateListener
+                                ,NearbyFragment.onLocationChangedInterface{
     public static String W = "wilbert";
     private int mark = 0;
     public static Fragment[] mFragments;
     FragmentIndicator mIndicator;
+
     public static  int userId;
 
+    double locationLng = -1;
+    double locationLat = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,4 +71,10 @@ public class MainActivity extends AppCompatActivity implements FragmentIndicator
         mark = which;
     }
 
+    @Override
+    public void onLocationChange(double locationLng, double locationLat) {
+        this.locationLat = locationLat;
+        this.locationLng = locationLng;
+        Log.d(W, "lat:" + locationLat + " lng:" + locationLng);
+    }
 }
