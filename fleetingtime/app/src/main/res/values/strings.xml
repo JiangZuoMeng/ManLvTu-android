@@ -21,4 +21,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login">登录</string>
 
+    <string name="create_album">创建相册</string>
+    <string name="album_name">相册名称</string>
+    <string name="album_private">隐私－公开相册</string>
+    <string name="album_syn">同步至</string>
+    <string name="album_wifi">仅wifi同步数据</string>
+    <string name="create_ok">确认</string>
+    <string name="create_cancel">取消</string>
+
 </resources>

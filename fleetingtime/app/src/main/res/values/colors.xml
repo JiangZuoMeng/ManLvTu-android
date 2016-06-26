@@ -32,5 +32,8 @@
     <color name="content_bg_dark">#bebebe</color>
     <color name="content_white">#f4f4f4</color>
 
+    <color name="trans_white">#ddf4f4f4</color>
+    <color name="light_white">#99f4f4f4</color>
+
 
 </resources>
