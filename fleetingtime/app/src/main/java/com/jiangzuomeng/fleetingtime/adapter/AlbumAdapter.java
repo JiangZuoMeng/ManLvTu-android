@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.VO.HotAlbum;
+import com.jiangzuomeng.fleetingtime.util.BitmapUtil;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder>
     public void onBindViewHolder(AlbumHolder viewHolder, int i ) {
         HotAlbum album = list.get(i);
 
-        viewHolder.cover.setImageBitmap(album.getAlbumCover());
+        viewHolder.cover.setImageBitmap(BitmapUtil.getRoundedCornerBitmap(album.getAlbumCover(),10.0f));
 
         viewHolder.name.setText(album.getAlbumName());
 
