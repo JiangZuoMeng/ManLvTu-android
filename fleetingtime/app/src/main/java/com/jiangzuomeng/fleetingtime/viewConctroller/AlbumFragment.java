@@ -25,7 +25,9 @@ import com.jiangzuomeng.fleetingtime.VO.Album;
 import com.jiangzuomeng.fleetingtime.adapter.GalleryAdapter;
 import com.jiangzuomeng.fleetingtime.models.Travel;
 import com.jiangzuomeng.fleetingtime.models.TravelItem;
+import com.jiangzuomeng.fleetingtime.network.FunctionResponseListener;
 import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
+import com.jiangzuomeng.fleetingtime.network.NetworkManager;
 import com.jiangzuomeng.fleetingtime.network.VolleyManager;
 import com.jiangzuomeng.fleetingtime.widget.GalleryFlow;
 
@@ -66,6 +68,8 @@ public class AlbumFragment extends Fragment {
     List<Integer> travelIdList = new ArrayList<>();
     HashMap<Marker, Integer> markerIdMap = new HashMap<>();
 
+    private NetworkManager networkManager;
+
     public AlbumFragment() {
         // Required empty public constructor
     }
@@ -92,8 +96,7 @@ public class AlbumFragment extends Fragment {
         mMapView.onCreate(savedInstanceState);
 //        initMap();
 
-        volleyManager = VolleyManager.getInstance(getActivity());
-
+        networkManager = NetworkManager.getInstance(getActivity().getApplicationContext());
 
         return view;
     }
@@ -106,26 +109,16 @@ public class AlbumFragment extends Fragment {
         aMap.animateCamera(cameraUpdate);
         aMap.setOnMarkerClickListener(onMarkerClickListener);
 
-        volleyManager = VolleyManager.getInstance(getActivity());
+        networkManager = NetworkManager.getInstance(getActivity().getApplicationContext());
 
         Travel travel = new Travel();
         travel.userId = MainActivity.userId;
-        String url = null;
         try {
-            url = travel.getQueryAllUrl().toString();
+            networkManager.queryTravelIdListByUserId(MainActivity.userId,
+                    queryAllListener, queryErrorListener);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        for (Marker marker : markerIdMap.keySet()) {
-            marker.destroy();
-        }
-        markerIdMap.clear();
-        travelIdList.clear();
-
-        StringRequest queryAllRequest = new StringRequest(Request.Method.GET,
-                url, queryAllResponseListener, queryErrorListener);
-        volleyManager.addToRequestQueue(queryAllRequest);
     }
 
 
@@ -197,78 +190,76 @@ public class AlbumFragment extends Fragment {
             return false;
         }
     };
-    private Response.Listener<String> queryAllResponseListener = new Response.Listener<String>() {
-        @Override
-        public void onResponse(String response) {
-            JSONObject jsonObject = VolleyManager.getJsonObject(response);
-            String result = null;
-            try {
-                result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (result != null && result
-                    .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
-                try {
-                    JSONArray jsonArray = jsonObject.
-                            getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject innerObject = jsonArray.getJSONObject(i);
-                        travelIdList.add(innerObject.getInt(NetworkJsonKeyDefine.ID));
-
-                        TravelItem travelItem = new TravelItem();
-                        travelItem.travelId = travelIdList.get(i);
-                        String url = null;
-                        url = travelItem.getQueryAllUrl().toString();
-                        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                                url, queryItemResponseListener, queryErrorListener);
-                        volleyManager.addToRequestQueue(stringRequest);
+    private FunctionResponseListener queryAllListener = new FunctionResponseListener(
+            new NetworkManager.INetworkResponse() {
+                @Override
+                public void doResponse(String response) {
+                    JSONObject jsonObject = VolleyManager.getJsonObject(response);
+                    String result = null;
+                    try {
+                        result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    if (result != null && result
+                            .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
+                        try {
+                            JSONArray jsonArray = jsonObject.
+                                    getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject innerObject = jsonArray.getJSONObject(i);
+                                travelIdList.add(innerObject.getInt(NetworkJsonKeyDefine.ID));
+                                networkManager.queryTravelItemIdListByTravelId(travelIdList.get(i)
+                                        , queryItemListener, queryErrorListener);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-        }
-    };
+    );
     private Response.ErrorListener queryErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
 
         }
     };
-    private Response.Listener<String> queryItemResponseListener = new Response.Listener<String>() {
+    private FunctionResponseListener queryItemListener = new FunctionResponseListener(
+            new NetworkManager.INetworkResponse() {
+                @Override
+                public void doResponse(String response) {
 
-        @Override
-        public void onResponse(String response) {
-            JSONObject jsonObject = VolleyManager.getJsonObject(response);
-            String result = null;
-            try {
-                result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (result != null && result
-                    .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
-                try {
-                    JSONArray jsonArray = jsonObject.
-                            getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
-                    if (jsonArray.length() > 0) {
-                        double locationLng = jsonArray.getJSONObject(0)
-                                .getDouble(NetworkJsonKeyDefine.LOCATION_LNG);
-                        double locationLat = jsonArray.getJSONObject(0)
-                                .getDouble(NetworkJsonKeyDefine.LOCATION_LAT);
-                        int travelId = jsonArray.getJSONObject(0)
-                                .getInt(NetworkJsonKeyDefine.TRAVEL_ID);
-                        LatLng latLng = new LatLng(locationLat, locationLng);
-                        Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
-                        markerIdMap.put(marker, travelId);
+                    JSONObject jsonObject = VolleyManager.getJsonObject(response);
+                    String result = null;
+                    try {
+                        result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    if (result != null && result
+                            .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
+                        try {
+                            JSONArray jsonArray = jsonObject.
+                                    getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
+                            if (jsonArray.length() > 0) {
+                                double locationLng = jsonArray.getJSONObject(0)
+                                        .getDouble(NetworkJsonKeyDefine.LOCATION_LNG);
+                                double locationLat = jsonArray.getJSONObject(0)
+                                        .getDouble(NetworkJsonKeyDefine.LOCATION_LAT);
+                                int travelId = jsonArray.getJSONObject(0)
+                                        .getInt(NetworkJsonKeyDefine.TRAVEL_ID);
+                                LatLng latLng = new LatLng(locationLat, locationLng);
+                                Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+                                markerIdMap.put(marker, travelId);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-        }
-    };
+    );
 }

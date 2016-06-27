@@ -8,7 +8,6 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,13 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.models.User;
+import com.jiangzuomeng.fleetingtime.network.FunctionResponseListener;
 import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
+import com.jiangzuomeng.fleetingtime.network.NetworkManager;
 import com.jiangzuomeng.fleetingtime.network.VolleyManager;
 
 import org.json.JSONException;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText mUsernameView;
@@ -40,6 +38,17 @@ public class LoginActivity extends AppCompatActivity {
     private Button mSignInButton;
     private Button mRegisiterBtn;
     private VolleyManager volleyManager;
+    private NetworkManager networkManager;
+    private FunctionResponseListener functionResponseListener = new FunctionResponseListener(new NetworkManager.INetworkResponse() {
+        @Override
+        public void doResponse(String response) {
+            try {
+                handleNetworkEvent(response);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         mRegisiterBtn = (Button) findViewById(R.id.register_button);
         mRegisiterBtn.setOnClickListener(btnListener);
 
-        volleyManager = VolleyManager.getInstance(getApplicationContext());
+        networkManager = NetworkManager.getInstance(this);
     }
 
     private View.OnClickListener btnListener = new View.OnClickListener() {
@@ -122,10 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(true);
             User user = new User(-1, mUsernameView.getText().toString(),
                     mPasswordView.getText().toString());
-            StringRequest loginRequest = new StringRequest(Request.Method.GET,
-                    user.getLoginUrl().toString(),
-                    responseListener, errorListener);
-            volleyManager.addToRequestQueue(loginRequest);
+            networkManager.login(user, functionResponseListener, errorListener);
         }
     }
 
@@ -134,9 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             showProgress(true);
             User user = new User(-1, mUsernameView.getText().toString(),
                         mPasswordView.getText().toString());
-            StringRequest registerRequest = new StringRequest(Request.Method.GET,
-                    user.getAddUrl().toString(), responseListener, errorListener);
-            volleyManager.addToRequestQueue(registerRequest);
+            networkManager.registerUser(user, functionResponseListener, errorListener);
         }
     }
 

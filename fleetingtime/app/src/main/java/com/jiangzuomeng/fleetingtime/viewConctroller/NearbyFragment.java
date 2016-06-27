@@ -35,7 +35,9 @@ import com.android.volley.toolbox.Volley;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.models.Travel;
 import com.jiangzuomeng.fleetingtime.models.TravelItem;
+import com.jiangzuomeng.fleetingtime.network.FunctionResponseListener;
 import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
+import com.jiangzuomeng.fleetingtime.network.NetworkManager;
 import com.jiangzuomeng.fleetingtime.network.VolleyManager;
 import com.jiangzuomeng.fleetingtime.util.BitmapUtil;
 
@@ -78,8 +80,7 @@ public class NearbyFragment extends Fragment implements LocationSource,
     private double locationLng = -1;
     private Map<Marker, TravelItem> markerTravelItemMap = new HashMap<>();
 
-    private VolleyManager volleyManager;
-
+    private NetworkManager networkManager;
 
 
     public interface onLocationChangedInterface {
@@ -102,8 +103,9 @@ public class NearbyFragment extends Fragment implements LocationSource,
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，实现地图生命周期管理
         mMapView.onCreate(savedInstanceState);
 
-        volleyManager = VolleyManager.getInstance(
-                getActivity().getApplicationContext());
+        networkManager = NetworkManager.getInstance(
+                getActivity().getApplicationContext()
+        );
         aMap = mMapView.getMap();
         initMap();
 
@@ -370,46 +372,45 @@ public class NearbyFragment extends Fragment implements LocationSource,
 
 public static final String W = "wilbert";
     private  void addMarkersNearBy() throws MalformedURLException {
-//        Log.d(W, "add markers nearby");
-        double distance = NetworkJsonKeyDefine.NEAR_DISTANCE;
-        String url = TravelItem.getQueryNearbyUrl(locationLat - distance,
-                locationLat + distance, locationLng - distance,
-                locationLng + distance).toString();
-        StringRequest request = new StringRequest(Request.Method.GET,
-                url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                for (Marker marker:markerTravelItemMap.keySet()) {
-                    marker.destroy();
-                }
-                markerTravelItemMap.clear();
-                JSONTokener parser = new JSONTokener(response);
-                try {
-                    JSONObject jsonObject = (JSONObject) parser.nextValue();
-                    JSONArray jsonArray = jsonObject.getJSONArray(
-                            NetworkJsonKeyDefine.DATA_KEY
-                    );
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        TravelItem travelItem = TravelItem.fromJson(jsonArray.getString(i), true);
-                        Marker marker = aMap.addMarker(new MarkerOptions().position(new LatLng(
-                                travelItem.locationLat, travelItem.locationLng
-                        )));
-                        marker.setTitle(travelItem.text);
-                        markerTravelItemMap.put(marker, travelItem);
-                        List<Marker> markers = aMap.getMapScreenMarkers();
-//                        Log.d(W, "markers size:" + markers.size());
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-        volleyManager.addToRequestQueue(request);
+        Log.d(W, "add markers nearby");
+        LatLng latLng = new LatLng(locationLat, locationLng);
+        networkManager.queryNearbyTravelItem(latLng, functionResponseListener, errorListener);
     }
+    private FunctionResponseListener functionResponseListener = new FunctionResponseListener(
+            new NetworkManager.INetworkResponse() {
+                @Override
+                public void doResponse(String response) {
+                    for (Marker marker:markerTravelItemMap.keySet()) {
+                        marker.destroy();
+                    }
+                    markerTravelItemMap.clear();
+                    JSONTokener parser = new JSONTokener(response);
+                    try {
+                        JSONObject jsonObject = (JSONObject) parser.nextValue();
+                        JSONArray jsonArray = jsonObject.getJSONArray(
+                                NetworkJsonKeyDefine.DATA_KEY
+                        );
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            TravelItem travelItem = TravelItem.fromJson(jsonArray.getString(i), true);
+                            Marker marker = aMap.addMarker(new MarkerOptions().position(new LatLng(
+                                    travelItem.locationLat, travelItem.locationLng
+                            )));
+                            marker.setTitle(travelItem.text);
+                            markerTravelItemMap.put(marker, travelItem);
+                            List<Marker> markers = aMap.getMapScreenMarkers();
+//                        Log.d(W, "markers size:" + markers.size());
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+    );
+    private Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.e(W, error.getMessage());
+        }
+    };
 }
