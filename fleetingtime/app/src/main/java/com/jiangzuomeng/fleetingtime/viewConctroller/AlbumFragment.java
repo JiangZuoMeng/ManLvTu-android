@@ -13,12 +13,29 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdate;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.jiangzuomeng.fleetingtime.R;
 import com.jiangzuomeng.fleetingtime.VO.Album;
 import com.jiangzuomeng.fleetingtime.adapter.GalleryAdapter;
+import com.jiangzuomeng.fleetingtime.models.Travel;
+import com.jiangzuomeng.fleetingtime.models.TravelItem;
+import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
+import com.jiangzuomeng.fleetingtime.network.VolleyManager;
 import com.jiangzuomeng.fleetingtime.widget.GalleryFlow;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,6 +62,9 @@ public class AlbumFragment extends Fragment {
 
     Bundle save;
 
+    private VolleyManager volleyManager;
+    List<Integer> travelIdList = new ArrayList<>();
+    HashMap<Marker, Integer> markerIdMap = new HashMap<>();
 
     public AlbumFragment() {
         // Required empty public constructor
@@ -58,19 +78,22 @@ public class AlbumFragment extends Fragment {
         getActivity().setTitle(getResources().getString(R.string.album));
         System.out.println(getActivity().getTitle());
 
-        view =  inflater.inflate(R.layout.fragment_album, container, false);
+        view = inflater.inflate(R.layout.fragment_album, container, false);
 
 
         //album gallery
-        galleryFlow = (GalleryFlow)view.findViewById(R.id.gallery);
-        albumList= getAlbumList();
-        galleryAdapter = new GalleryAdapter(getContext(),albumList,galleryFlow);
+        galleryFlow = (GalleryFlow) view.findViewById(R.id.gallery);
+        albumList = getAlbumList();
+        galleryAdapter = new GalleryAdapter(getContext(), albumList, galleryFlow);
 
         galleryFlow.setAdapter(galleryAdapter);
 
         mMapView = (MapView) view.findViewById(R.id.mapView_gallery);
         mMapView.onCreate(savedInstanceState);
 //        initMap();
+
+        volleyManager = VolleyManager.getInstance(getActivity());
+
 
         return view;
     }
@@ -81,14 +104,31 @@ public class AlbumFragment extends Fragment {
         }
         CameraUpdate cameraUpdate = CameraUpdateFactory.zoomTo(4);
         aMap.animateCamera(cameraUpdate);
+
+        volleyManager = VolleyManager.getInstance(getActivity());
+
+        Travel travel = new Travel();
+        travel.userId = MainActivity.userId;
+        String url = null;
+        try {
+            url = travel.getQueryAllUrl().toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        for (Marker marker : markerIdMap.keySet()) {
+            marker.destroy();
+        }
+        StringRequest queryAllRequest = new StringRequest(Request.Method.GET,
+                url, queryAllResponseListener, queryErrorListener);
+        volleyManager.addToRequestQueue(queryAllRequest);
     }
 
 
     private List<Album> getAlbumList() {
         List<Album> albumList = new ArrayList<>();
 
-        tempBitmaps.add(BitmapFactory.decodeResource(getResources(),R.drawable.beijing));
-        tempBitmaps.add(BitmapFactory.decodeResource(getResources(),R.drawable.guangzhou));
+        tempBitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.beijing));
+        tempBitmaps.add(BitmapFactory.decodeResource(getResources(), R.drawable.guangzhou));
         Album album1 = new Album("北京", tempBitmaps.get(0));
         albumList.add(album1);
         Album album2 = new Album("广州", tempBitmaps.get(1));
@@ -97,17 +137,19 @@ public class AlbumFragment extends Fragment {
         albumList.add(album2);
 
         return albumList;
-    };
+    }
+
+    ;
 
     @Override
     public void onHiddenChanged(boolean hidd) {
-        if(!hidd) {
+        if (!hidd) {
             System.out.println(TAG);
             getActivity().setTitle(getResources().getString(R.string.album));
             initMap();
             mMapView.onResume();
         }
-        if(hidd) {
+        if (hidd) {
             mMapView.onPause();
 
         }
@@ -134,6 +176,7 @@ public class AlbumFragment extends Fragment {
         super.onPause();
         mMapView.onPause();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -141,4 +184,78 @@ public class AlbumFragment extends Fragment {
         mMapView.onSaveInstanceState(outState);
     }
 
+    private Response.Listener<String> queryAllResponseListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            JSONObject jsonObject = VolleyManager.getJsonObject(response);
+            String result = null;
+            try {
+                result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (result != null && result
+                    .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
+                try {
+                    JSONArray jsonArray = jsonObject.
+                            getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject innerObject = jsonArray.getJSONObject(i);
+                        travelIdList.add(innerObject.getInt(NetworkJsonKeyDefine.ID));
+
+                        TravelItem travelItem = new TravelItem();
+                        travelItem.travelId = travelIdList.get(i);
+                        String url = null;
+                        url = travelItem.getQueryAllUrl().toString();
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                                url, queryItemResponseListener, queryErrorListener);
+                        volleyManager.addToRequestQueue(stringRequest);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    private Response.ErrorListener queryErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+
+        }
+    };
+    private Response.Listener<String> queryItemResponseListener = new Response.Listener<String>() {
+
+        @Override
+        public void onResponse(String response) {
+            JSONObject jsonObject = VolleyManager.getJsonObject(response);
+            String result = null;
+            try {
+                result = jsonObject.getString(NetworkJsonKeyDefine.RESULT_KEY);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (result != null && result
+                    .equals(NetworkJsonKeyDefine.RESULT_SUCCESS)) {
+                try {
+                    JSONArray jsonArray = jsonObject.
+                            getJSONArray(NetworkJsonKeyDefine.DATA_KEY);
+                    if (jsonArray.length() > 0) {
+                        double locationLng = jsonArray.getJSONObject(0)
+                                .getDouble(NetworkJsonKeyDefine.LOCATION_LNG);
+                        double locationLat = jsonArray.getJSONObject(0)
+                                .getDouble(NetworkJsonKeyDefine.LOCATION_LAT);
+                        int travelId = jsonArray.getJSONObject(0)
+                                .getInt(NetworkJsonKeyDefine.TRAVEL_ID);
+                        LatLng latLng = new LatLng(locationLat, locationLng);
+                        Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+                        markerIdMap.put(marker, travelId);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
 }
