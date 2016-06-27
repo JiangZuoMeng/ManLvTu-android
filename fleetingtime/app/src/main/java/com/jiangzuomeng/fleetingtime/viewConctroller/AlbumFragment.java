@@ -104,6 +104,7 @@ public class AlbumFragment extends Fragment {
         }
         CameraUpdate cameraUpdate = CameraUpdateFactory.zoomTo(4);
         aMap.animateCamera(cameraUpdate);
+        aMap.setOnMarkerClickListener(onMarkerClickListener);
 
         volleyManager = VolleyManager.getInstance(getActivity());
 
@@ -115,9 +116,13 @@ public class AlbumFragment extends Fragment {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
         for (Marker marker : markerIdMap.keySet()) {
             marker.destroy();
         }
+        markerIdMap.clear();
+        travelIdList.clear();
+
         StringRequest queryAllRequest = new StringRequest(Request.Method.GET,
                 url, queryAllResponseListener, queryErrorListener);
         volleyManager.addToRequestQueue(queryAllRequest);
@@ -184,6 +189,14 @@ public class AlbumFragment extends Fragment {
         mMapView.onSaveInstanceState(outState);
     }
 
+    AMap.OnMarkerClickListener onMarkerClickListener = new AMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            int markerTravelId = markerIdMap.get(marker);
+            // TODO: 2016/6/27 跳转到每一个相册详情
+            return false;
+        }
+    };
     private Response.Listener<String> queryAllResponseListener = new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {

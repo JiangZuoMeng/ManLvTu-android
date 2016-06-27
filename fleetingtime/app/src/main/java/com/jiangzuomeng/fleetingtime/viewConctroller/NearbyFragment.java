@@ -2,6 +2,8 @@ package com.jiangzuomeng.fleetingtime.viewConctroller;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -33,6 +37,7 @@ import com.jiangzuomeng.fleetingtime.models.Travel;
 import com.jiangzuomeng.fleetingtime.models.TravelItem;
 import com.jiangzuomeng.fleetingtime.network.NetworkJsonKeyDefine;
 import com.jiangzuomeng.fleetingtime.network.VolleyManager;
+import com.jiangzuomeng.fleetingtime.util.BitmapUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,7 +54,9 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class NearbyFragment extends Fragment implements LocationSource,
-        AMapLocationListener, AMap.OnMarkerClickListener {
+        AMapLocationListener,
+        AMap.InfoWindowAdapter, AMap.OnInfoWindowClickListener, AMap.OnMarkerClickListener
+{
     private View view;
 
     private static final String TAG = "NEARBY";
@@ -72,6 +79,9 @@ public class NearbyFragment extends Fragment implements LocationSource,
     private Map<Marker, TravelItem> markerTravelItemMap = new HashMap<>();
 
     private VolleyManager volleyManager;
+
+
+
     public interface onLocationChangedInterface {
         void onLocationChange(double locationLng, double locationLat);
     }
@@ -147,9 +157,44 @@ public class NearbyFragment extends Fragment implements LocationSource,
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
 
+        aMap.setInfoWindowAdapter(this);
+        aMap.setOnInfoWindowClickListener(this);
+        aMap.setOnMarkerClickListener(this);
     }
 
+    //点击marker时显示图片
+    @Override
+    public View getInfoWindow(Marker marker) {
+        Log.d(W, "get InfoWindow");
+        ImageView imageView = new ImageView(getActivity());
+        Bitmap tempBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.beijing);
+        imageView.setLayoutParams(new LinearLayout.LayoutParams(300, 300));
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setImageBitmap(BitmapUtil.createReflectedBitmap(tempBitmap));
+        return imageView;
+    }
 
+    @Override
+    public View getInfoContents(Marker marker) {
+        Log.d(W, "getInfoContents");
+        return null;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Log.d(W, "onInfoWindowClick");
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.d(W, "on marker click");
+        if (marker.isInfoWindowShown()) {
+            marker.hideInfoWindow();
+        } else {
+            marker.showInfoWindow();
+        }
+        return true;
+    }
     /**
      * tabListener
      */
@@ -322,13 +367,10 @@ public class NearbyFragment extends Fragment implements LocationSource,
             notifyLocationChanged = (onLocationChangedInterface) context;
         }
     }
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        return false;
-    }
+
 public static final String W = "wilbert";
     private  void addMarkersNearBy() throws MalformedURLException {
-        Log.d(W, "add markers nearby");
+//        Log.d(W, "add markers nearby");
         double distance = NetworkJsonKeyDefine.NEAR_DISTANCE;
         String url = TravelItem.getQueryNearbyUrl(locationLat - distance,
                 locationLat + distance, locationLng - distance,
@@ -352,9 +394,10 @@ public static final String W = "wilbert";
                         Marker marker = aMap.addMarker(new MarkerOptions().position(new LatLng(
                                 travelItem.locationLat, travelItem.locationLng
                         )));
+                        marker.setTitle(travelItem.text);
                         markerTravelItemMap.put(marker, travelItem);
                         List<Marker> markers = aMap.getMapScreenMarkers();
-                        Log.d(W, "markers size:" + markers.size());
+//                        Log.d(W, "markers size:" + markers.size());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
