@@ -37,42 +37,42 @@ public class NetworkManager {
         return networkManager;
     }
 
+    private void methodGet(String url, FunctionResponseListener listener,
+                           Response.ErrorListener errorListener) {
+        StringRequest registerRequest = new StringRequest(Request.Method.GET,
+                url, listener, errorListener);
+        volleyManager.addToRequestQueue(registerRequest);
+    }
+
     public void registerUser(User user, FunctionResponseListener listener,
                              Response.ErrorListener errorListener) throws MalformedURLException {
-        StringRequest registerRequest = new StringRequest(Request.Method.GET,
-                user.getAddUrl().toString(), listener, errorListener);
-        volleyManager.addToRequestQueue(registerRequest);
+        methodGet(user.getAddUrl().toString(), listener, errorListener);
     }
 
     public void login(User user, FunctionResponseListener listener,
                       Response.ErrorListener errorListener) throws MalformedURLException {
-        StringRequest loginRequest = new StringRequest(Request.Method.GET,
-                user.getLoginUrl().toString(),
-                listener, errorListener);
-        volleyManager.addToRequestQueue(loginRequest);
+        methodGet(user.getLoginUrl().toString(), listener, errorListener);
     }
 
     public void queryNearbyTravelItem(LatLng currentLocation, FunctionResponseListener listener,
-                                      Response.ErrorListener errorListener) throws MalformedURLException {
+                                      Response.ErrorListener errorListener)
+            throws MalformedURLException {
         Double distance = NetworkJsonKeyDefine.NEAR_DISTANCE;
         double locationLat = currentLocation.latitude;
         double locationLng = currentLocation.longitude;
         String url = TravelItem.getQueryNearbyUrl(locationLat - distance,
                 locationLat + distance, locationLng - distance,
                 locationLng + distance).toString();
-        StringRequest request = new StringRequest(Request.Method.GET,
-                url, listener, errorListener);
-        volleyManager.addToRequestQueue(request);
+        methodGet(url, listener, errorListener);
     }
 
     public void queryTravelIdListByUserId(int userId, FunctionResponseListener listener,
-                                          Response.ErrorListener errorListener) throws MalformedURLException {
+                                          Response.ErrorListener errorListener)
+            throws MalformedURLException {
         Travel travel = new Travel();
         travel.userId = userId;
         String url = travel.getQueryAllUrl().toString();
-        StringRequest request = new StringRequest(Request.Method.GET,
-                url, listener, errorListener);
-        volleyManager.addToRequestQueue(request);
+        methodGet(url, listener, errorListener);
     }
 
     public void queryTravelItemIdListByTravelId(int travelId, FunctionResponseListener listener,
@@ -81,9 +81,55 @@ public class NetworkManager {
         travelItem.travelId = travelId;
         String url = null;
         url = travelItem.getQueryAllUrl().toString();
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                url, listener, errorListener);
-        volleyManager.addToRequestQueue(stringRequest);
+        methodGet(url, listener, errorListener);
     }
 
+    public void addNewTravel(Travel travel, FunctionResponseListener listener,
+                             Response.ErrorListener errorListener) throws MalformedURLException {
+        String url = travel.getAddUrl().toString();
+        methodGet(url, listener, errorListener);
+    }
+
+    public void queryTravelByTravelId(int travelId, FunctionResponseListener listener,
+                                      Response.ErrorListener errorListener) throws MalformedURLException {
+        Travel travel = new Travel();
+        travel.id = travelId;
+        methodGet(travel.getQueryUrl().toString(), listener, errorListener);
+    }
+
+    public void removeTravelByTravelId(int travelId, FunctionResponseListener listener,
+                                       Response.ErrorListener errorListener) throws MalformedURLException {
+        Travel travel = new Travel();
+        travel.id = travelId;
+        methodGet(travel.getRemoveUrl().toString(), listener, errorListener);
+    }
+
+    public void updateTravel(Travel travel, FunctionResponseListener listener,
+                             Response.ErrorListener errorListener) throws MalformedURLException {
+        methodGet(travel.getUpdateUrl().toString(), listener, errorListener);
+    }
+
+    public void addNewTravelItem(TravelItem travelItem, FunctionResponseListener listener,
+                                 Response.ErrorListener errorListener) throws MalformedURLException {
+        methodGet(travelItem.getAddUrl().toString(), listener, errorListener);
+    }
+
+    public void queryTravelItemByTravelItemId(int travelItemId, FunctionResponseListener listener,
+                                              Response.ErrorListener errorListener) throws MalformedURLException {
+        TravelItem travelItem = new TravelItem();
+        travelItem.id = travelItemId;
+        methodGet(travelItem.getQueryUrl().toString(), listener, errorListener);
+    }
+
+    public void removeTravelItemByTravelItemId(int travelItemId, FunctionResponseListener listener,
+                                               Response.ErrorListener errorListener) throws MalformedURLException {
+        TravelItem travelItem = new TravelItem();
+        travelItem.id = travelItemId;
+        methodGet(travelItem.getRemoveUrl().toString(), listener, errorListener);
+    }
+
+    public void updateTravelItem(TravelItem travelItem, FunctionResponseListener listener,
+                                 Response.ErrorListener errorListener) throws MalformedURLException {
+        methodGet(travelItem.getUpdateUrl().toString(), listener, errorListener);
+    }
 }
