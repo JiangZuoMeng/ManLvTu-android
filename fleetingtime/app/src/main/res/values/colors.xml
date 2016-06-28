@@ -27,6 +27,7 @@
     <color name="content_gray">#AA7A7A7A</color>
     <color name="line_gray">#447A7A7A</color>
     <color name="light_gray">#7A7A7A</color>
+    <color name="trans_gray">#887A7A7A</color>
     <color name="content_black">#d12A2A2A</color>
     <color name="content_bg">#dedede</color>
     <color name="content_bg_dark">#bebebe</color>

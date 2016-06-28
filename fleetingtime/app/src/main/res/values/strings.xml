@@ -26,7 +26,15 @@
     <string name="album_private">隐私－公开相册</string>
     <string name="album_syn">同步至</string>
     <string name="album_wifi">仅wifi同步数据</string>
-    <string name="create_ok">确认</string>
-    <string name="create_cancel">取消</string>
+    <string name="create_ok">确 认</string>
+    <string name="create_cancel">取 消</string>
+    <string name="title_activity_album_detail">AlbumDetailActivity</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_album__detail_">Album_Detail_Activity</string>
+
+    <string name="photo_description">还没有照片描述</string>
+    <string name="photo_add_location">添加位置</string>
+    <string name="photo_time">2016-05-21</string>
 
 </resources>

@@ -10,6 +10,9 @@
     <dimen name="circle_card_margin_top">7dp</dimen>
 
     <dimen name="line_spacing">7dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 
 </resources>

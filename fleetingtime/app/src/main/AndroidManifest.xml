@@ -22,8 +22,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="0c7059fb04a99f5de83687712e70b00e" />
 
-        <activity android:name=".viewConctroller.MainActivity">
-        </activity>
+        <activity android:name=".viewConctroller.MainActivity" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -34,6 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".viewConctroller.AlbumDetailActivity"
+            android:label="@string/title_activity_album__detail_"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".viewConctroller.PhotoActivity"></activity>
     </application>
 
 </manifest>
