@@ -18,9 +18,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--key in windows by weizhao-->
+<!--        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="0c7059fb04a99f5de83687712e70b00e" />-->
+        <!--key in ubuntu by weizhao-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="0c7059fb04a99f5de83687712e70b00e" />
+            android:value="bd3a42e86b5492844fcc7b4452b4f9dd" />
 
         <activity android:name=".viewConctroller.MainActivity" />
 
