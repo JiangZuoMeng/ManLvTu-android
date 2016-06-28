@@ -2,8 +2,12 @@ package com.jiangzuomeng.fleetingtime.viewConctroller;
 
 
 import android.content.Context;
+<<<<<<< HEAD
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+=======
+import android.content.Intent;
+>>>>>>> android-guanlu
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -239,7 +243,25 @@ public class NearbyFragment extends Fragment implements LocationSource,
                     createAlbumDialog.setClickListener(new CreateAlbumDialog.ClickListenerInterface() {
                         @Override
                         public void doCreate() {
+                            String albumName = "";
+                            if(createAlbumDialog.getAlbumName() != null) {
+                                albumName = createAlbumDialog.getAlbumName();
+
+                            } else {
+                                albumName = "未命名";
+                            }
+
+                            System.out.println("----"+albumName);
                             createAlbumDialog.dismiss();
+
+                            Intent intent = new Intent();
+                            intent.setClass(getActivity(), AlbumDetailActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("AlbumName",albumName);
+                            intent.putExtras(bundle);
+                            //startActivityForResult(intent, 1);
+                            getActivity().startActivity(intent);
+
                         }
 
                         @Override

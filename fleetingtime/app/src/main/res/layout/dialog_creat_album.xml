@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/create_album"
+        android:textScaleX="1.2"
         android:textColor="@color/trans_white"
         android:textSize="16sp"
         android:layout_marginBottom="15dp"
@@ -115,7 +116,7 @@
             android:text="@string/create_ok"
             android:id="@+id/create_album"
             android:textColor="@color/trans_white"
-            android:background="@drawable/shape_white"
+            android:background="@drawable/ripple_button"
             android:layout_marginRight="20dp"/>
 
         <Button
@@ -125,7 +126,7 @@
             android:text="@string/create_cancel"
             android:id="@+id/create_cancel"
             android:textColor="@color/trans_white"
-            android:background="@drawable/shape_white"
+            android:background="@drawable/ripple_button"
             />
     </LinearLayout>
 

@@ -25,6 +25,7 @@ public class CreateAlbumDialog extends Dialog {
 
     private Context context;
     private EditText albumName;
+    private String name;
     private List<ImageButton> albumPrivate = new ArrayList<>();
     private List<ImageButton> albumSyn= new ArrayList<>();
     private List<ImageButton> albumWifi = new ArrayList<>();
@@ -157,6 +158,7 @@ public class CreateAlbumDialog extends Dialog {
             int id = v.getId();
             switch (id) {
                 case R.id.create_album:
+                    name = albumName.getText().toString();
                     clickListenerInterface.doCreate();
                     break;
                 case R.id.create_cancel:
@@ -165,5 +167,23 @@ public class CreateAlbumDialog extends Dialog {
 
             }
         }
+    }
+
+    public String getAlbumName() {
+
+        return name;
+    }
+
+    public Boolean getPrivate() {
+        return isPrivate;
+    }
+
+    public Boolean getWifi() {
+        return isWifi;
+    }
+
+    public Boolean getSyn() {
+
+        return isSyn;
     }
 }
