@@ -183,7 +183,6 @@ public class CreateAlbumDialog extends Dialog {
     }
 
     public Boolean getSyn() {
-
         return isSyn;
     }
 }

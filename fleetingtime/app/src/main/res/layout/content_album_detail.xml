@@ -58,7 +58,7 @@
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/menu_capture"
+            android:id="@+id/photo_capture"
             app:fab_colorNormal="@color/fabRed"
             app:fab_colorPressed="@color/fabRedDark"
             app:fab_size="mini"

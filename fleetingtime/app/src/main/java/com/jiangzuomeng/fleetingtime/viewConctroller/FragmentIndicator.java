@@ -43,7 +43,7 @@ public class FragmentIndicator extends LinearLayout implements OnClickListener{
 
     private static final  int BG = 0xfff9f9f9;
 
-    private static final int HIGH = 90;
+    private static final int HIGH = 100;
 
     FragmentIndicator(Context context) {
         super(context);
