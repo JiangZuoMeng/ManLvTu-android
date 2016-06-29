@@ -2,10 +2,12 @@ package com.jiangzuomeng.fleetingtime.VO;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Created by guanlu on 16/6/25.
  */
-public class Album {
+public class Album implements Serializable{
     private String name;
     private Bitmap cover;
 

@@ -2,12 +2,10 @@ package com.jiangzuomeng.fleetingtime.viewConctroller;
 
 
 import android.content.Context;
-<<<<<<< HEAD
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-=======
 import android.content.Intent;
->>>>>>> android-guanlu
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

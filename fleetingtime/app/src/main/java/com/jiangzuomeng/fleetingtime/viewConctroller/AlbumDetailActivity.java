@@ -37,6 +37,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
     private Bitmap bg,temp;
 
+    private com.getbase.floatingactionbutton.FloatingActionButton takePhoto;
+
     private android.support.design.widget.CollapsingToolbarLayout detail_bg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,8 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
 
 
+
+
         //avatar
         avatar = (de.hdodenhof.circleimageview.CircleImageView)findViewById(R.id.user_avatar);
 
@@ -94,6 +98,18 @@ public class AlbumDetailActivity extends AppCompatActivity {
 
         detail_bg.setBackground(bgr);
 
+
+
+        //
+        takePhoto = (com.getbase.floatingactionbutton.FloatingActionButton)findViewById(R.id.photo_capture);
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(AlbumDetailActivity.this,PhotoBrowserActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
