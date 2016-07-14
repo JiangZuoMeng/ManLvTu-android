@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10dp"
+        >
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/album_item_userlogo"
+            />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/album_item_userlogo"
+            android:padding="5dp"
+            android:id="@+id/relativeLayout">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="5dp">
+
+                <TextView
+                    android:id="@+id/cmmnt_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/album_clickable_text"
+                    android:layout_alignParentTop="true"
+                    android:text="锋哥"
+                    android:textSize="16sp"
+                    />
+                <TextView
+                    android:id="@+id/cmmnt_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="天气真好"
+                    android:layout_toEndOf="@id/cmmnt_text"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/cmmnt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:text="Nov 12 12:20"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/lightBlue"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp">
+        <ImageView
+            android:id="@+id/user_logo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/white"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:padding="5dp"
+            />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/user_logo"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="@drawable/album_clickable_text"
+                />
+
+            <TextView
+                android:id="@+id/album_details_user_state"
+                android:layout_width="fill_parent"
+                android:paddingBottom="15dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/album_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:text="time"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        >
+        <ListView
+            android:id="@+id/comments"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="10"
+            />
+        <RelativeLayout
+            android:id="@+id/fuck"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            >
+
+            <Button
+                android:id="@+id/send_cmmnt_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/album_button"
+                android:text="@string/album_details_send"
+                android:textColor="@android:color/white"
+                android:layout_alignParentRight="true"
+                style="?android:borderlessButtonStyle" />
+            <EditText
+                android:id="@+id/album_my_comments"
+                android:inputType="text"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:layout_toLeftOf="@id/send_cmmnt_btn"
+                android:layout_width="fill_parent"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

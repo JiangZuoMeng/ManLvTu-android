@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">漫旅图</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">用户名</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="action_register">注册</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_incorrect_username">用户不存在</string>
+    <string name="error_incorrect_username_or_password">用户名或密码错误</string>
+    <string name="error_empty_field_required">这一项是必需的</string>
+    <string name="error_in_register">用户已存在</string>
+    <string name="error_of_server">服务器错误</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_main">漫旅图</string>
+    <string name="title_activity_albumviewer">AlbumViewer </string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_notification">Notification</string>>
+    <string name="search_label">Search_label</string>
+    <string name="search_hint">搜索标签,地点,用户</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_album_viewer">AlbumViewerActivity</string>
+    <string name="dialogTitle">请输入旅图的名称</string>
+    <string name="confirm">确定</string>
+    <string name="createItemTextHint">这一刻的想法...</string>
+    <string name="addOthers">添加</string>
+    <string name="location">所在位置</string>
+
+    <!-- String for single travel activity-->
+    <string name="action_add_new_position">添加新的坐标点</string>
+    <string name="action_lock_map">锁定地图与解锁</string>
+    <string name="single_travel_default_list_view_item_description">未完成编辑，长按编辑或删除</string>
+    <string name="delete_confirm">确定删除?</string>
+    <string name="cancle">取消</string>
+    <string name="album_comment">评论</string>
+    <string name="album_like">赞</string>
+    <string name="album_details_send">发送</string>
+    <string name="title_activity_notification">消息</string>
+    <string name="title_activity_album">相册</string><string name="tipsBelowTablayout">x</string>
+</resources>

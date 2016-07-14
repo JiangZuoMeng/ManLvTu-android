@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/album_pager"/>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/album_indicators"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="30dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:id="@+id/linearLayout">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/album_state"
+                    android:background="@android:color/black"
+                    android:alpha="0.5"
+                    android:padding="5dp"
+                    android:textColor="@android:color/white"
+                    android:gravity="left"
+                    android:textAlignment="gravity" />
+                <RelativeLayout
+                    android:id="@+id/rela_lay"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    style="?android:buttonBarStyle"
+                    android:background="@color/colorPrimary">
+                    <Button
+                        android:id="@+id/album_comment_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text="@string/album_comment"
+                        android:background="@drawable/album_button"
+                        android:layout_alignParentEnd="true"
+                        style="?android:borderlessButtonStyle"
+                        />
+                    <Button
+                        android:id="@+id/album_like_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text="@string/album_like"
+                        android:background="@drawable/album_button"
+                        android:layout_toStartOf="@id/album_comment_btn"
+                        style="?android:borderlessButtonStyle"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </FrameLayout>
+
+</LinearLayout>

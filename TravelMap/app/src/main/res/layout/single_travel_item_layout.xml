@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="80dip">
+
+    <ImageView
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="80dip"
+        android:id="@+id/SingleTravelItemImageView" />
+
+    <TextView
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="80dip"
+        android:id="@+id/SingleTravelItemTextView"
+        android:textSize="12sp"
+        android:padding="10dip" />
+
+</LinearLayout>
